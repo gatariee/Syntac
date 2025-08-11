@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Syntac</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div id="app">
+        <nav>
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search modules..." />
+            </div>
+            <ul id="menu">
+            </ul>
+        </nav>
+        <main>
+            <div class="options-container">
+                <div id="globals">
+                    <h3>Global Options</h3>
+                    <form id="form-globals"></form>
+                </div>
+                <div id="extras">
+                    <h3>Sub-module Options</h3>
+                    <form id="form-extras"></form>
+                </div>
+            </div>
+
+            <div id="preview">
+                <h3>Preview</h3>
+                <textarea id="preview-content"></textarea>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const connectors = {{ connectors| tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/interact.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>
