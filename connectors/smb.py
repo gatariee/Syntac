@@ -13,9 +13,9 @@ class Smb(Module):
     @sub_module("List Shares (NetExec)")
     def ls_nxc(
         self,
-        host,
-        username="",
-        password="",
+        host: str = "",
+        username: str = "",
+        password:str = "",
         is_ntlm: bool = False,
         kerberos: bool = False,
     ) -> str:
@@ -26,7 +26,7 @@ class Smb(Module):
         return f"nxc smb '{host}' -u '{username}' -p '{password}' --shares"
 
     @sub_module("List Shares (SMBClient)")
-    def ls_smbclient(self, host, username="", password="") -> str:
+    def ls_smbclient(self, host: str = "", username: str = "", password:str = "") -> str:
         if not username and not password:
             return f"smbclient -L {host} -N"
         elif not password:

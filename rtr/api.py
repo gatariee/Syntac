@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from typing import get_type_hints, ClassVar
-from services.connector_loader import get_connectors
+from services.loader import get_connectors
 
 api_bp = Blueprint('api', __name__)
 

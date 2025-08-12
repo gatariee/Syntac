@@ -1,12 +1,12 @@
 from flask import Flask
 from rtr.init import register_routes
-from services.connector_loader import load_connectors
+from services.loader import load_connectors
 from config import Config
 
 
 def init():
     app = Flask(__name__)
-    load_connectors()
+    load_connectors(Config.CONNECTORS_PATH)
     register_routes(app)
     return app
 

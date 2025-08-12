@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template
-from services.connector_loader import get_connectors
-from services.form_builder import build_connector_description
+from services.loader import get_connectors
+from services.parser import build_connector_description
 
-main_bp = Blueprint('main', __name__)
+index_bp = Blueprint('index', __name__)
 
 
-@main_bp.route("/")
+@index_bp.route("/")
 def index():
     connectors = get_connectors()
     connector_desc = build_connector_description(connectors)
