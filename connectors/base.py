@@ -57,6 +57,9 @@ class Module(ABC):
     def get_params(self) -> Dict[str, Any]:
         params = {field: getattr(self, field) for field in self._global_fields}
         return params
+    
+    def get_submodules(self) -> List[str]:
+        return list(self.sub_modules.keys())
 
     def get_submodule_params(self, key: str) -> OrderedDict[str, inspect.Parameter]:
         if key not in self.sub_modules:

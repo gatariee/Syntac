@@ -15,14 +15,17 @@ class Smb(Module):
         self,
         host: str = "",
         username: str = "",
-        password:str = "",
+        password: str = "",
         is_ntlm: bool = False,
         kerberos: bool = False,
     ) -> str:
+
+        if kerberos and is_ntlm:
+            return f"nxc smb '{host}' -u '{username}' -H '{password}' --kerberos --shares"
         if kerberos:
-            return f"nxc smb '{host}' --use-kcache"
+            return f"nxc smb '{host}' --use-kcache --shares"
         if is_ntlm:
-            return f"nxc smb {host} -u '{username}' -H '{password}' --shares"
+            return f"nxc smb '{host}' -u '{username}' -H '{password}' --shares"
         return f"nxc smb '{host}' -u '{username}' -p '{password}' --shares"
 
     @sub_module("List Shares (SMBClient)")
