@@ -15,7 +15,7 @@ class Delegations(Module):
     @sub_module("Find Delegations (NetExec)")
     def find_delegations_nxc(
         self,
-        dc_host: str,
+        dc_host: str = "",
         username: str = "",
         password: str = "",
         is_ntlm: bool = False,

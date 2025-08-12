@@ -1,8 +1,9 @@
-dev
+a quick and dirty templating solution for creating cheatsheets quickly and easily
 
 ```bash
 export FLASK_APP="app:init"
 export FLASK_ENV=development
+export FLASK_RUN_HOST='0.0.0.0'
 flask run
 ```
 

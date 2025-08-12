@@ -1,13 +1,13 @@
 let current = { name: null, sub: null };
 
 const menu = document.getElementById('menu'),
-      globalsW = document.getElementById('globals'),
-      extrasW = document.getElementById('extras'),
-      formG = document.getElementById('form-globals'),
-      formE = document.getElementById('form-extras'),
-      previewW = document.getElementById('preview'),
-      previewContent = document.getElementById('preview-content'),
-      searchBox = document.getElementById('search-box');
+    globalsW = document.getElementById('globals'),
+    extrasW = document.getElementById('extras'),
+    formG = document.getElementById('form-globals'),
+    formE = document.getElementById('form-extras'),
+    previewW = document.getElementById('preview'),
+    previewContent = document.getElementById('preview-content'),
+    searchBox = document.getElementById('search-box');
 
 let containerPositions = {
     globals: { x: 0, y: 0 },
@@ -19,7 +19,7 @@ let zIndexCounter = 100;
 
 interact('#globals, #extras, #preview h3').draggable({
     listeners: {
-        move (event) {
+        move(event) {
             const target = event.target.parentElement.id === 'preview' ? event.target.parentElement : event.target;
             if (!target || !containerPositions.hasOwnProperty(target.id)) return;
 
@@ -40,18 +40,29 @@ interact('#globals, #extras, #preview h3').draggable({
     }
 });
 
-
+// caching
 function saveState() {
     const data = collect();
-    localStorage.setItem(current.name + '_' + current.sub, JSON.stringify(data));
+    for (const key in data) {
+        if (key.startsWith('__')) continue;
+        localStorage.setItem('field_' + key, JSON.stringify(data[key]));
+    }
 }
 
 function loadState() {
-    const savedState = localStorage.getItem(current.name + '_' + current.sub);
-    if (savedState) {
-        return JSON.parse(savedState);
-    }
-    return null;
+    const savedState = {};
+    const moduleGlobals = connectors?.[current.name]?.globals || [];
+    const moduleExtras = connectors?.[current.name]?.subs?.find(s => s.key === current.sub)?.extras || [];
+    const allFields = [...moduleGlobals, ...moduleExtras];
+    
+    allFields.forEach(field => {
+        const savedValue = localStorage.getItem('field_' + field.name);
+        if (savedValue !== null) {
+            savedState[field.name] = JSON.parse(savedValue);
+        }
+    });
+
+    return savedState;
 }
 
 function buildMenu(query = '') {
@@ -85,7 +96,7 @@ function buildMenu(query = '') {
                 li.onclick = () => selectSub(name, s.key);
                 subList.appendChild(li);
             });
-            
+
             menu.appendChild(subList);
         }
     }
