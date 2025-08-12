@@ -1,11 +1,16 @@
-# dirty trick because i'm too lazy to make this a proper package
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+This script is an example of how to load, and print ALL connectors from a given directory.
+"""
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from services.loader import load_connectors, get_connectors
 from services.parser import pretty_print
-
 
 if __name__ == "__main__":
     CFG_PATH = "../connectors"

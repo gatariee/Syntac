@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+This script is a basic syntax linter for connectors, this just makes sure that your connectors follow the stipulated format.
+"""
+
+
 import sys
 import os
 import importlib.util
@@ -78,8 +85,9 @@ def main():
     imported_class = lazy_import(pkg_path)
     
     print(f"+ Imported class: {imported_class.__name__} from {pkg_path}")
-    pretty_print({imported_class.__name__: imported_class})
 
+    # If this fails, your class is probably broken!
+    pretty_print({imported_class.__name__: imported_class})
 
 if __name__ == "__main__":
     main()
