@@ -3,7 +3,7 @@ from .base import Module, register_module, sub_module
 
 @register_module
 class BloodHound(Module):
-    name = "Blood Hound Collection"
+    name = "BloodHound"
     description = ""
 
    
@@ -23,7 +23,7 @@ class BloodHound(Module):
     ) -> str:
         if kerberos:
             return f"bloodhound-python -u '{username}' -d '{domain}' -k -c all -v -ns {nameserver}"
-        return f"bloodhound-python -u '{username}' -d '{domain}' -p '{password}' -c all -v -ns {nameserver}"
+        return f"bloodhound-python -u '{username}' -p '{password}' -d '{domain}' -c all -v -ns {nameserver}"
 
     @sub_module("Collection (NetExec)")
     def run_netexec(
@@ -34,7 +34,7 @@ class BloodHound(Module):
         kerberos: bool = False,
     ) -> str:
         if kerberos:
-            return f"nxc ldap '{domain}' -u '{username}' -k --bloodhound --collection All'"
+            return f"nxc ldap '{domain}' -u '{username}' -k --bloodhound --collection All"
         return f"nxc ldap '{domain}' -u '{username}' -p '{password}' --bloodhound --collection All"
         
 
