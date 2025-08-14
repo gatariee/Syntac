@@ -182,7 +182,7 @@ you can use the `parser.py` script to hook into `argparse.ArgumentParser` of any
 note that this will almost always require some manual adjustments, as the generated signature will not be perfect. however, it should give you a good starting point.
 
 ```
-~$ python3 parser.py /home/kali/.local/bin/rbcd.py
+~$ python3 parser.py /home/kali/.local/bin/rbcd.py --doc-string
 [--] Found 1 parsers in /home/kali/.local/bin/rbcd.py
 
 def rbcd(
