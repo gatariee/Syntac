@@ -8,7 +8,7 @@ html {
 }
 
 a {
-    color: #007bff;
+    color: #5ea3ed;
     text-decoration: none;
 }
 
@@ -80,10 +80,8 @@ nav li.sub.active {
 #content-wrapper {
     display: flex;
     flex-direction: row;
-    /* Arranges options and preview side-by-side */
     gap: 24px;
     flex: 1;
-    /* Allows this container to grow and fill remaining space */
 }
 
 .main-content-row {
@@ -97,7 +95,6 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    /* Stacks Documentation on top of Content Wrapper */
     gap: 24px;
     padding: 32px;
     overflow-y: auto;
@@ -113,10 +110,8 @@ main {
 #options-container {
     display: flex;
     flex-direction: column;
-    /* Stacks globals and extras vertically */
     gap: 24px;
     flex: 1;
-    /* Allows the options container to grow */
 }
 
 #globals,
@@ -217,7 +212,6 @@ main {
     cursor: grab;
     position: relative;
     flex: 1;
-    /* Ensures preview takes up the remaining horizontal space */
 }
 
 #preview-content {

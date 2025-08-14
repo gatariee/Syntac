@@ -22,7 +22,7 @@ class Smb(Module):
         """
         Reference: [https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain](https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain)
         
-        This submodule lists SMB shares using the NetExec tool.
+        This submodule lists SMB shares using the [NetExec](https://github.com/Pennyw0rth/NetExec) tool.
         """
         if kerberos and is_ntlm:
             return f"nxc smb '{host}' -u '{username}' -H '{password}' --kerberos --shares"
@@ -34,6 +34,11 @@ class Smb(Module):
 
     @sub_module("List Shares (SMBClient)")
     def ls_smbclient(self, host: str = "", username: str = "", password:str = "") -> str:
+        """
+        Lists SMB shares using the [smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html) command-line tool.
+        
+        \* not to be mistaken with [smbclient.py](https://github.com/fortra/impacket/blob/master/examples/smbclient.py)
+        """
         if not username and not password:
             return f"smbclient -L {host} -N"
         elif not password:
