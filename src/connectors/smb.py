@@ -21,6 +21,7 @@ class Smb(Module):
     ) -> str:
         """
         Reference: [https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain](https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain)
+        
         This submodule lists SMB shares using the NetExec tool.
         """
         if kerberos and is_ntlm:

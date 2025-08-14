@@ -19,10 +19,24 @@ class BloodHound(Module):
         password: str = "",
         nameserver: str= "",
         kerberos: bool = False,
+        verbose: bool = False,
     ) -> str:
+        """
+        Collects BloodHound (Legacy) data using [bloodhound-python](https://github.com/dirkjanm/BloodHound.py)
+        """
+        cmd = ""
         if kerberos:
-            return f"bloodhound-python -u '{username}' -d '{domain}' -k -c all -v -ns {nameserver}"
-        return f"bloodhound-python -u '{username}' -p '{password}' -d '{domain}' -c all -v -ns {nameserver}"
+            cmd += f"bloodhound-python -u '{username}' -d '{domain}' -k -c all"
+        else:
+            cmd += f"bloodhound-python -u '{username}' -p '{password}' -d '{domain}' -c all"
+        
+        if nameserver:
+            cmd += f" -ns {nameserver}"
+
+        if verbose:
+            cmd += " -v"
+        
+        return cmd
 
     @sub_module("Collection (NetExec)")
     def run_netexec(
