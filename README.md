@@ -182,45 +182,87 @@ you can use the `parser.py` script to hook into `argparse.ArgumentParser` of any
 note that this will almost always require some manual adjustments, as the generated signature will not be perfect. however, it should give you a good starting point.
 
 ```
-~$ python3 parser.py /home/kali/.local/bin/rbcd.py --doc-string
-[--] Found 1 parsers in /home/kali/.local/bin/rbcd.py
+~$ python3 scripts/parser.py /opt/tools/krbrelayx/dnstool.py --doc-string
+[--] Found 1 parsers in /opt/tools/krbrelayx/dnstool.py
 
-def rbcd(
-    identity: str = None,
-    delegate_to: str = None,
-    delegate_from: str = None,
-    action: str = 'read',
-    use_ldaps: bool = False,
-    ts: bool = False,
-    debug: bool = False,
-    hashes: str = None,
-    no_pass: bool = False,
-    k: bool = False,
-    aesKey: str = None,
+def dnstool(
+    host: str = None,
+    user: str = None,
+    password: str = None,
+    forest: bool = False,
+    legacy: bool = False,
+    zone: str = None,
+    print_zones: bool = False,
+    print_zones_dn: bool = False,
+    tcp: bool = False,
+    kerberos: bool = False,
+    port: str = 389,
+    force_ssl: bool = False,
     dc_ip: str = None,
-    dc_host: str = None,
+    dns_ip: str = None,
+    aesKey: str = None,
+    record: str = None,
+    action: str = 'query',
+    type: str = 'A',
+    data: str = None,
+    allow_multiple: bool = False,
+    ttl: str = 180,
 ) -> str:
     """
-    This is a rough estimate of what the script expects,
-    note that this docstring should be omitted in the final code.
+    This is a rough estimate of what the script expects.
 
     Args:
-        identity (str, optional): domain.local/username[:password]. Defaults to None.
-        delegate_to (str, optional): Target account the DACL is to be read/edited/etc.. Defaults to None.
-        delegate_from (str, optional): Attacker controlled account to write on the rbcd property of -delegate-to (only when using `-action write`). Defaults to None.
-        action (str, optional): Action to operate on msDS-AllowedToActOnBehalfOfOtherIdentity. Defaults to read.
-        use_ldaps (bool, optional): Use LDAPS instead of LDAP. Defaults to False.
-        ts (bool, optional): Adds timestamp to every logging output. Defaults to False.
-        debug (bool, optional): Turn DEBUG output ON. Defaults to False.
-        hashes (str, optional): NTLM hashes, format is LMHASH:NTHASH. Defaults to None.
-        no_pass (bool, optional): don't ask for password (useful for -k). Defaults to False.
-        k (bool, optional): Use Kerberos authentication. Grabs credentials from ccache file (KRB5CCNAME) based on target parameters. If valid credentials cannot be found, it will use the ones specified in the command line. Defaults to False.
+        host (str, optional): Hostname/ip or ldap://host:port connection string to connect to. Defaults to None.
+        user (str, optional): DOMAIN\username for authentication.. Defaults to None.
+        password (str, optional): Password or LM:NTLM hash, will prompt if not specified. Defaults to None.
+        forest (bool, optional): Search the ForestDnsZones instead of DomainDnsZones. Defaults to False.
+        legacy (bool, optional): Search the System partition (legacy DNS storage). Defaults to False.
+        zone (str, optional): Zone to search in (if different than the current domain). Defaults to None.
+        print_zones (bool, optional): Only query all zones on the DNS server, no other modifications are made. Defaults to False.
+        print_zones_dn (bool, optional): Query and print the Distinguished Names of all zones on the DNS server. Defaults to False.
+        tcp (bool, optional): use DNS over TCP. Defaults to False.
+        kerberos (bool, optional): Use Kerberos authentication. Grabs credentials from ccache file (KRB5CCNAME) based on target parameters. If valid credentials cannot be found, it will use the ones specified in the command line. Defaults to False.
+        port (str, optional): LDAP port, default value is 389. Defaults to 389.
+        force_ssl (bool, optional): Force SSL when connecting to LDAP server. Defaults to False.
+        dc_ip (str, optional): IP Address of the domain controller. If omitted it will use the domain part (FQDN) specified in the target parameter. Defaults to None.
+        dns_ip (str, optional): IP Address of a DNS Server. Defaults to None.
         aesKey (str, optional): AES key to use for Kerberos Authentication (128 or 256 bits). Defaults to None.
-        dc_ip (str, optional): IP Address of the domain controller or KDC (Key Distribution Center) for Kerberos. If omitted it will use the domain part (FQDN) specified in the identity parameter. Defaults to None.
-        dc_host (str, optional): Hostname of the domain controller or KDC (Key Distribution Center) for Kerberos. If omitted, -dc-ip will be used. Defaults to None.
+        record (str, optional): Record to target (FQDN). Defaults to None.
+        action (str, optional): Action to perform. Options: add (add a new record), modify (modify an existing record), query (show existing), remove (mark record for cleanup from DNS cache), delete (delete from LDAP). Default: query. Defaults to query.
+        type (str, optional): Record type to add (Currently only A records supported). Defaults to A.
+        data (str, optional): Record data (IP address). Defaults to None.
+        allow_multiple (bool, optional): Allow multiple A records for the same name. Defaults to False.
+        ttl (str, optional): TTL for record (default: 180). Defaults to 180.
 
     Returns:
         str: The resultant output of the submodule.
     """
+    # maps function param name to CLI option string
+    __arg_map__ = {
+        'host': '',
+        'user': '-u',
+        'password': '-p',
+        'forest': '--forest',
+        'legacy': '--legacy',
+        'zone': '--zone',
+        'print_zones': '--print-zones',
+        'print_zones_dn': '--print-zones-dn',
+        'tcp': '--tcp',
+        'kerberos': '-k',
+        'port': '-port',
+        'force_ssl': '-force-ssl',
+        'dc_ip': '-dc-ip',
+        'dns_ip': '-dns-ip',
+        'aesKey': '-aesKey',
+        'record': '-r',
+        'action': '-a',
+        'type': '-t',
+        'data': '-d',
+        'allow_multiple': '--allow-multiple',
+        'ttl': '--ttl',
+    }
+    # ...implementation goes here
     pass
+
+
 ```

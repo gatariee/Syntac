@@ -152,60 +152,57 @@ def _lex(action: Action) -> Union[_SyntacSig, None]:
 
 def generate_signature(
     parser: ArgumentParser,
-    docstring: bool = True,
+    docstring: bool,
 ) -> str:
-    """
-    Generate a stub function signature for the given ArgumentParser.
-
-    If NO_DOCSTRING is True, only the function definition, parameters,
-    and a pass statement are emitted (no docstring).
-
-    Otherwise, a full docstring describing each parameter is included.
-    """
     fn = parser.prog.replace(" ", "_").replace(".py", "")
-    sigs: List[_SyntacSig] = []
-    for action in parser._actions:
-        sig = _lex(action)
-        if sig is not None:
-            sigs.append(sig)
+    sigs = [_lex(action) for action in parser._actions if _lex(action) is not None]
 
+    params_block = _build_params_block(sigs)
+    stub_lines = [f"def {fn}(\n{params_block}\n) -> str:"]
+    
+    if docstring:
+        stub_lines.extend(_build_docstring(sigs))
+    
+    stub_lines.extend(_build_arg_map(sigs))
+    stub_lines.extend(["    # ...implementation goes here", "    pass\n"])
+    
+    return "\n".join(stub_lines)
+
+
+def _build_params_block(sigs: List[_SyntacSig]) -> str:
     param_lines = [
         f"    {s.dest}: {s.type} = {repr(s.default)},"
         for s in sigs
     ]
-    params_block = "\n".join(param_lines)
+    return "\n".join(param_lines)
 
-    if not docstring:
-        return f"""\
-def {fn}(
-{params_block}
-) -> str:
-    pass
-"""
 
+def _build_docstring(sigs: List[_SyntacSig]) -> List[str]:
     doc_params = "\n".join(
         f"        {s.dest} ({s.type}, optional): {s.help}. "
         f"Defaults to {s.default}."
         for s in sigs
     )
+    return [
+        '    """',
+        "    This is a rough estimate of what the script expects.",
+        "\n    Args:",
+        doc_params,
+        "\n    Returns:",
+        "        str: The resultant output of the submodule.",
+        '    """'
+    ]
 
-    return f"""\
-def {fn}(
-{params_block}
-) -> str:
-    \"\"\"
-    This is a rough estimate of what the script expects,
-    note that this docstring should be omitted in the final code.
 
-    Args:
-{doc_params}
-
-    Returns:
-        str: The resultant output of the submodule.
-    \"\"\"
-    pass
-"""
-
+def _build_arg_map(sigs: List[_SyntacSig]) -> List[str]:
+    map_lines = [
+        f"        {s.dest!r}: {s.option_strings!r},"
+        for s in sigs
+    ]
+    return [
+        "    # maps function param name to CLI option string",
+        "    __arg_map__ = {"
+    ] + map_lines + ["    }"]
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -220,6 +217,7 @@ if __name__ == "__main__":
         "--doc-string",
         help="Generate a docstring for the function signature.",
         action="store_true",
+        dest="doc_string",
         default=False,
     )
 
