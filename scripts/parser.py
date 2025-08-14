@@ -152,7 +152,16 @@ def _lex(action: Action) -> Union[_SyntacSig, None]:
 
 def generate_signature(
     parser: ArgumentParser,
+    docstring: bool = True,
 ) -> str:
+    """
+    Generate a stub function signature for the given ArgumentParser.
+
+    If NO_DOCSTRING is True, only the function definition, parameters,
+    and a pass statement are emitted (no docstring).
+
+    Otherwise, a full docstring describing each parameter is included.
+    """
     fn = parser.prog.replace(" ", "_").replace(".py", "")
     sigs: List[_SyntacSig] = []
     for action in parser._actions:
@@ -165,6 +174,14 @@ def generate_signature(
         for s in sigs
     ]
     params_block = "\n".join(param_lines)
+
+    if not docstring:
+        return f"""\
+def {fn}(
+{params_block}
+) -> str:
+    pass
+"""
 
     doc_params = "\n".join(
         f"        {s.dest} ({s.type}, optional): {s.help}. "
@@ -191,9 +208,30 @@ def {fn}(
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python itsp.py path/to/script.py")
+    parser = ArgumentParser()
+
+    parser.add_argument(
+        "script",
+        help="Path to the Python script to introspect.",
+        action="store",
+    )
+
+    parser.add_argument(
+        "--doc-string",
+        help="Generate a docstring for the function signature.",
+        action="store_true",
+        default=False,
+    )
+
+    args = parser.parse_args()
+    
+    if not args.script:
+        parser.print_usage()
         sys.exit(1)
+
     parsers = itsp(sys.argv[1])
     for parser in parsers:
-        print(generate_signature(parser))
+        print(generate_signature(
+            parser=parser,
+            docstring=args.doc_string
+        ))
