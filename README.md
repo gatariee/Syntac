@@ -1,3 +1,5 @@
+# Syntac
+
 a quick and dirty templating solution for creating cheatsheets quickly and easily
 
 ```bash
