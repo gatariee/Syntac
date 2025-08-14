@@ -63,7 +63,7 @@ class BloodHound(Module):
         Collects BloodHound-CE using [RustHoundCE](https://github.com/g0h4n/RustHound-CE) from Linux
         """
         if ldaps and ldapip:
-            raise ValueError("Cannot use both ldapip (-i) and ldaps (--ldaps) options at the same time. Clear ldapip field or uncheck ldaps!")
+           return ("Cannot use both ldapip (-i) and ldaps (--ldaps) options at the same time. Clear ldapip field or uncheck ldaps!")
 
         if self.kerberos:
             return f"rusthound-ce -d '{self.domain}' -f {ldapfqdn} -k -o {path} -z"
