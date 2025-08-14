@@ -13,9 +13,6 @@ class Smb(Module):
     @sub_module("List Shares (NetExec)")
     def ls_nxc(
         self,
-        host: str = "",
-        username: str = "",
-        password: str = "",
         is_ntlm: bool = False,
         kerberos: bool = False,
     ) -> str:
@@ -25,23 +22,23 @@ class Smb(Module):
         This submodule lists SMB shares using the [NetExec](https://github.com/Pennyw0rth/NetExec) tool.
         """
         if kerberos and is_ntlm:
-            return f"nxc smb '{host}' -u '{username}' -H '{password}' --kerberos --shares"
+            return f"nxc smb '{self.host}' -u '{self.username}' -H '{self.password}' --kerberos --shares"
         if kerberos:
-            return f"nxc smb '{host}' --use-kcache --shares"
+            return f"nxc smb '{self.host}' --use-kcache --shares"
         if is_ntlm:
-            return f"nxc smb '{host}' -u '{username}' -H '{password}' --shares"
-        return f"nxc smb '{host}' -u '{username}' -p '{password}' --shares"
+            return f"nxc smb '{self.host}' -u '{self.username}' -H '{self.password}' --shares"
+        return f"nxc smb '{self.host}' -u '{self.username}' -p '{self.password}' --shares"
 
     @sub_module("List Shares (SMBClient)")
-    def ls_smbclient(self, host: str = "", username: str = "", password:str = "") -> str:
+    def ls_smbclient(self) -> str:
         """
         Lists SMB shares using the [smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html) command-line tool.
         
         \* not to be mistaken with [smbclient.py](https://github.com/fortra/impacket/blob/master/examples/smbclient.py)
         """
-        if not username and not password:
-            return f"smbclient -L {host} -N"
-        elif not password:
-            return f"smbclient -L {host} -U {username}%"
+        if not self.username and not self.password:
+            return f"smbclient -L {self.host} -N"
+        elif not self.password:
+            return f"smbclient -L {self.host} -U {self.username}%"
         else:
-            return f"smbclient -L {host} -U {username}%{password}"
+            return f"smbclient -L {self.host} -U {self.username}%{self.password}"
