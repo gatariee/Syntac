@@ -174,3 +174,53 @@ make sure your connectors pass the linting tests
 │      - text: str (default: Hello, World!)
 └────────────────────────────────────────
 ```
+
+## argparsing
+
+you can use the `parser.py` script to hook into `argparse.ArgumentParser` of any program, and dump the arguments into a `submodule` capable signature.
+
+note that this will almost always require some manual adjustments, as the generated signature will not be perfect. however, it should give you a good starting point.
+
+```
+~$ python3 parser.py /home/kali/.local/bin/rbcd.py
+[--] Found 1 parsers in /home/kali/.local/bin/rbcd.py
+
+def rbcd(
+    identity: str = None,
+    delegate_to: str = None,
+    delegate_from: str = None,
+    action: str = 'read',
+    use_ldaps: bool = False,
+    ts: bool = False,
+    debug: bool = False,
+    hashes: str = None,
+    no_pass: bool = False,
+    k: bool = False,
+    aesKey: str = None,
+    dc_ip: str = None,
+    dc_host: str = None,
+) -> str:
+    """
+    This is a rough estimate of what the script expects,
+    note that this docstring should be omitted in the final code.
+
+    Args:
+        identity (str, optional): domain.local/username[:password]. Defaults to None.
+        delegate_to (str, optional): Target account the DACL is to be read/edited/etc.. Defaults to None.
+        delegate_from (str, optional): Attacker controlled account to write on the rbcd property of -delegate-to (only when using `-action write`). Defaults to None.
+        action (str, optional): Action to operate on msDS-AllowedToActOnBehalfOfOtherIdentity. Defaults to read.
+        use_ldaps (bool, optional): Use LDAPS instead of LDAP. Defaults to False.
+        ts (bool, optional): Adds timestamp to every logging output. Defaults to False.
+        debug (bool, optional): Turn DEBUG output ON. Defaults to False.
+        hashes (str, optional): NTLM hashes, format is LMHASH:NTHASH. Defaults to None.
+        no_pass (bool, optional): don't ask for password (useful for -k). Defaults to False.
+        k (bool, optional): Use Kerberos authentication. Grabs credentials from ccache file (KRB5CCNAME) based on target parameters. If valid credentials cannot be found, it will use the ones specified in the command line. Defaults to False.
+        aesKey (str, optional): AES key to use for Kerberos Authentication (128 or 256 bits). Defaults to None.
+        dc_ip (str, optional): IP Address of the domain controller or KDC (Key Distribution Center) for Kerberos. If omitted it will use the domain part (FQDN) specified in the identity parameter. Defaults to None.
+        dc_host (str, optional): Hostname of the domain controller or KDC (Key Distribution Center) for Kerberos. If omitted, -dc-ip will be used. Defaults to None.
+
+    Returns:
+        str: The resultant output of the submodule.
+    """
+    pass
+```

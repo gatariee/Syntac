@@ -1,11 +1,11 @@
+#!/usr/bin/env python3
+
 import argparse
 import runpy
 import sys
 import os
 
-from io import StringIO
-from pprint import pprint
-from typing import List, Dict
+from typing import List
 from contextlib import redirect_stdout, redirect_stderr
 
 from argparse import (
