@@ -10,7 +10,9 @@ import sys
 import os
 from typing import get_type_hints
 import inspect
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+SRC = "src"
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', SRC)))
 
 from connectors.smb import Smb as connector
 
@@ -60,6 +62,10 @@ if __name__ == "__main__":
             f"  - {param}: {type_.annotation.__name__ if hasattr(type_.annotation, '__name__') else str(type_.annotation)}"
             for param, type_ in sig.items()
         ]))
+
+    # We can also get the documentation of the submodules, which is useful for understanding what they do
+    print(f"\nDocumentation for submodule 'List Shares (NetExec)':")
+    print(connector().get_doc(sub_module="List Shares (NetExec)"))
 
     # **If you don't care about programmatically accessing the parameters, you can just run a submodule directly
     
@@ -116,6 +122,7 @@ if __name__ == "__main__":
         connector(host="dc06.example.com", username="test6", password="test6")
             .run_sub_module(key="List Shares (NetExec)", is_ntlm=True, kerberos=False)
     )
+
 
 
 

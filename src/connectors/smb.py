@@ -19,7 +19,10 @@ class Smb(Module):
         is_ntlm: bool = False,
         kerberos: bool = False,
     ) -> str:
-
+        """
+        Reference: [https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain](https://www.netexec.wiki/smb-protocol/authentication/checking-credentials-domain)
+        This submodule lists SMB shares using the NetExec tool.
+        """
         if kerberos and is_ntlm:
             return f"nxc smb '{host}' -u '{username}' -H '{password}' --kerberos --shares"
         if kerberos:

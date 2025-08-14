@@ -1,4 +1,6 @@
 import inspect
+import markdown
+
 from abc import ABC
 from dataclasses import dataclass
 from typing import (
@@ -11,7 +13,6 @@ def sub_module(key: str) -> Callable[[Callable], Callable]:
         setattr(fn, "_sub_module_key", key)
         return fn
     return decorator
-
 
 @dataclass(init=False)
 class Module(ABC):
@@ -53,6 +54,15 @@ class Module(ABC):
         if kwargs:
             bad = ", ".join(kwargs)
             raise TypeError(f"{cls.__name__} got unexpected kwargs: {bad}")
+
+    def get_doc(self, sub_module: str = "") -> str:
+        if sub_module:
+            print(f"Getting doc for sub_module: {sub_module}")
+            if sub_module not in self.sub_modules:
+                raise KeyError(f"{self.name} has no sub_module {sub_module}")
+            method = self.sub_modules[sub_module]
+            return method.__doc__ or ""
+        return ""
 
     def get_params(self) -> Dict[str, Any]:
         params = {field: getattr(self, field) for field in self._global_fields}

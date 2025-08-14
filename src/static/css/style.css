@@ -7,6 +7,11 @@ html {
     color: #e0e0e0;
 }
 
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
 #app {
     display: flex;
     height: 100%;
@@ -187,30 +192,30 @@ main {
     overflow-y: auto;
     line-height: 1.4;
     font-size: 1.1em;
-    
+
     min-height: 400px;
     max-height: 800px;
 
     width: 100%;
-    color: #f0f0f0; 
+    color: #f0f0f0;
     resize: none;
     box-sizing: border-box;
-  }
+}
 
-  .heading + ul {
+.heading+ul {
     display: none;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.heading.active + ul {
+.heading.active+ul {
     display: block;
 }
 
 .heading {
     cursor: pointer;
-    user-select: none; 
+    user-select: none;
 }
 
 .heading::after {

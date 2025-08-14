@@ -12,7 +12,8 @@ import importlib.util
 import inspect
 from pathlib import Path
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+SRC = "src"
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', SRC)))
 from services.parser import pretty_print
 
 def lazy_import(pkg_path: str):

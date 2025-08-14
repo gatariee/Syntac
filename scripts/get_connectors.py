@@ -7,7 +7,8 @@ This script is an example of how to load, and print ALL connectors from a given 
 
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+SRC = "src"
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', SRC)))
 
 from services.loader import load_connectors, get_connectors
 from services.parser import pretty_print

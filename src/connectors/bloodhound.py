@@ -6,7 +6,6 @@ class BloodHound(Module):
     name = "BloodHound"
     description = ""
 
-   
     domain: str = ""
     username: str = ""
     password: str = ""

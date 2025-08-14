@@ -1,5 +1,9 @@
 from typing import get_type_hints, ClassVar, Dict, Any, List
 import inspect
+import markdown
+
+def to_html(text: str) -> str:
+    return markdown.markdown(text, extensions=["fenced_code", "tables", "codehilite"])
 
 def _format_default(default: Any) -> str:
     if default is inspect._empty:
@@ -57,6 +61,15 @@ def build_connector_description(connectors: Dict[str, Any]) -> Dict[str, Any]:
         hints = get_type_hints(cls, include_extras=True)
         globals_ = _extract_global_fields(cls, hints)
         subs = _extract_submodule_fields(cls, globals_)
+        
+        for sub in subs:
+            sub_key = sub["key"]
+            sub["doc"] = cls().get_doc(sub_module=sub_key)
+            try:
+                sub["doc"] = to_html(sub["doc"])
+            except Exception as e:
+                sub["doc"] = f"<p>Error converting doc to HTML: {e}</p>"
+        
         desc[name] = {"globals": globals_, "subs": subs}
     return desc
 
