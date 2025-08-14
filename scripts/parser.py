@@ -47,6 +47,11 @@ def _recording_init(self, *args, **kwargs):
 
 
 def itsp(sp: str) -> List[ArgumentParser]:
+
+    # fix relative imports
+    script_dir = os.path.dirname(os.path.abspath(sp))
+    sys.path.insert(0, script_dir)
+
     # 1) hook argparse
     argparse.ArgumentParser.__init__ = _recording_init
 
